@@ -7,35 +7,21 @@
 
 using std::shared_ptr;
 
-int Length(shared_ptr<ListNode<int>> L);
-void AdvanceListByK(int k, shared_ptr<ListNode<int>>* L);
 
 shared_ptr<ListNode<int>> OverlappingNoCycleLists(
     shared_ptr<ListNode<int>> l0, shared_ptr<ListNode<int>> l1) {
-  int l0_len = Length(l0), l1_len = Length(l1);
-
-  // Advances the longer list to get equal length lists.
-  AdvanceListByK(abs(l0_len - l1_len), l0_len > l1_len ? &l0 : &l1);
-
-  while (l0 && l1 && l0 != l1) {
-    l0 = l0->next, l1 = l1->next;
-  }
-  return l0;  // nullptr implies there is no overlap between l0 and l1.
-}
-
-int Length(shared_ptr<ListNode<int>> L) {
-  int length = 0;
-  while (L) {
-    ++length, L = L->next;
-  }
-  return length;
-}
-
-// Advances L by k steps.
-void AdvanceListByK(int k, shared_ptr<ListNode<int>>* L) {
-  while (k--) {
-    *L = (*L)->next;
-  }
+    auto head1 = l0;
+    auto head2 = l1;
+    while(head1 != head2)
+    {
+        if(head1 == nullptr)
+            head1 = l1;
+        if(head2 == nullptr)
+            head2 = l0;
+        head1 = head1->next;
+        head2 = head2->next;
+    }
+  return head1;
 }
 
 void OverlappingNoCycleListsWrapper(TimedExecutor& executor,
